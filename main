@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 // Set environment variables in Railway dashboard
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL;
-const TARGET_CHANNEL_ID = process.env.TARGET_CHANNEL_ID; // optional: limit to one channel
+//const TARGET_CHANNEL_ID = process.env.TARGET_CHANNEL_ID; // optional: limit to one channel
 
 const client = new Client({
   intents: [
@@ -20,7 +20,7 @@ client.on('ready', () => {
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return; // ignore bots
-  if (TARGET_CHANNEL_ID && message.channel.id !== TARGET_CHANNEL_ID) return; // filter channel
+ // if (TARGET_CHANNEL_ID && message.channel.id !== TARGET_CHANNEL_ID) return; // filter channel
 
   try {
     await fetch(N8N_WEBHOOK_URL, {
