@@ -6,7 +6,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBit
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return; // ignore bot messages
   
-  await fetch('https://<your-n8n-domain>/webhook/discord-message', {
+  await fetch('https://primary-production-a5a71.up.railway.app/webhook/leveragelabs-webhook-support', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(message)
