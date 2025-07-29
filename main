@@ -1,0 +1,16 @@
+const { Client, GatewayIntentBits } = require('discord.js');
+const fetch = require('node-fetch');
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return; // ignore bot messages
+  
+  await fetch('https://<your-n8n-domain>/webhook/discord-message', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(message)
+  });
+});
+
+client.login('MTM5OTc1OTc1MDExMTAzOTY0Mg.G9OEHb.GuGb33R-Zpkf8U6qCgfsvP2j3xtwP-_D5q_jIc');
