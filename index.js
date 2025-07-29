@@ -1,7 +1,6 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const fetch = require('node-fetch');
 
-// Railway ENV vars
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL;
 
@@ -18,7 +17,7 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', async (message) => {
-  if (message.author.bot) return; // ignore bot messages
+  if (message.author.bot) return;
 
   try {
     await fetch(N8N_WEBHOOK_URL, {
