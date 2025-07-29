@@ -1,16 +1,44 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 const fetch = require('node-fetch');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+// Railway ENV vars
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL;
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
+});
+
+client.on('ready', () => {
+  console.log(`✅ Bot logged in as ${client.user.tag}`);
+});
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return; // ignore bot messages
-  
-  await fetch('https://primary-production-a5a71.up.railway.app/webhook/leveragelabs-webhook-support', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(message)
-  });
+
+  try {
+    await fetch(N8N_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: message.id,
+        channel_id: message.channel.id,
+        author: {
+          id: message.author.id,
+          username: message.author.username
+        },
+        content: message.content,
+        timestamp: message.createdAt
+      })
+    });
+    console.log(`📩 Forwarded: ${message.content}`);
+  } catch (err) {
+    console.error("❌ Error forwarding message:", err);
+  }
 });
 
-client.login('MTM5OTc1OTc1MDExMTAzOTY0Mg.G9OEHb.GuGb33R-Zpkf8U6qCgfsvP2j3xtwP-_D5q_jIc');
+client.login(DISCORD_BOT_TOKEN);
